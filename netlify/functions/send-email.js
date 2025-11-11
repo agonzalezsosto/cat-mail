@@ -1,11 +1,11 @@
-const sgMail = require('@sendgrid/mail');
+const sgMail = require("@sendgrid/mail");
 
 exports.handler = async (event) => {
   // Only allow POST requests
-  if (event.httpMethod !== 'POST') {
+  if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
-      body: JSON.stringify({ error: 'Method Not Allowed' }),
+      body: JSON.stringify({ error: "Method Not Allowed" }),
     };
   }
 
@@ -17,7 +17,7 @@ exports.handler = async (event) => {
     if (!email || !message) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ error: 'Email and message are required' }),
+        body: JSON.stringify({ error: "Email and message are required" }),
       };
     }
 
@@ -28,9 +28,9 @@ exports.handler = async (event) => {
     const msg = {
       to: email, // Recipient email from the form
       from: process.env.FROM_EMAIL, // Must be verified in SendGrid
-      subject: 'New Message',
+      subject: "New Message",
       text: message,
-      html: `<p>${message}</p>`,
+      html: `<p>${message}</p> <img src="https://cataas.com/cat" />`,
     };
 
     // Send the email
@@ -38,15 +38,18 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ success: true, message: 'Email sent successfully' }),
+      body: JSON.stringify({
+        success: true,
+        message: "Email sent successfully",
+      }),
     };
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error("Error sending email:", error);
     return {
       statusCode: 500,
       body: JSON.stringify({
-        error: 'Failed to send email',
-        details: error.message
+        error: "Failed to send email",
+        details: error.message,
       }),
     };
   }
